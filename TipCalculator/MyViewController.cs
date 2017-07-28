@@ -15,11 +15,23 @@ namespace TipCalculator
             base.ViewDidLoad();
 
             View.BackgroundColor = UIColor.Yellow;
-            UITextField TotalAmount = CreateTotalAmountEntryField();
+            UITextField totalAmount = CreateTotalAmountEntryField();
             UIButton calcButton = CreateCalculateButton();
             UILabel resultLabel = CreateResultLabel();
 
-            View.AddSubviews(TotalAmount, calcButton, resultLabel);
+            View.AddSubviews(totalAmount, calcButton, resultLabel);
+
+            calcButton.TouchUpInside += (object sender, EventArgs e) =>
+            {
+                System.Diagnostics.Debug.WriteLine($"**** {this.GetType().Name}.TouchUpInside_Lambda");
+
+                totalAmount.ResignFirstResponder();
+
+                double parsedTotalAmount;
+                double.TryParse(totalAmount.Text, out parsedTotalAmount);
+                var tip = 0.2 * parsedTotalAmount;
+                resultLabel.Text = $"{tip:C}";
+            };
         }
 
         private UILabel CreateResultLabel()
